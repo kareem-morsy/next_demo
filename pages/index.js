@@ -1,9 +1,12 @@
 import { useForm } from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
 
+  const router = useRouter();
+  
 
   const schema = yup.object().shape({
       email     : yup.string().email().required(),
@@ -26,10 +29,15 @@ export default function Home() {
           .then((data)=>{
             console.log(data);
             console.log(data.data.token);
-            localStorage.setItem("token",data.data.token)
+            if (typeof window !== 'undefined') {
+              localStorage.setItem("token",data.data.token)
+          }
+            
               
             
-            if (data.message === "success"){     
+            if (data.message === "success"){    
+              router.push('/homePage') 
+              console.log(router)
             }
       })
   }
